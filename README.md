@@ -22,12 +22,16 @@ Swarm of conversational customer service agents. These include:
 - Install the required libraries with ``uv pip install -r requirements.txt``.
 - Application
   - Run the app locally with ``python3 app-gradio.py``;
-  - Acess the deployd version on Huggingface Spaces: https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm (WIP)
 
-## Deploy:
+
+## How to Acess and deploy:
+### HuggingFace Spaces
+- Acess the deployd version on Huggingface Spaces: https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm (WIP)
+<img src="demo.gif"> 
+
 ### API:
 - Initialize the API using the ``uvicorn api:app --reload`` command in the terminal.
-- Ali há uma interface interativa (Swagger UI) onde você pode enviar perguntas à rota POST /ask. Exemplo de JSON de entrada:
+- There's an interactive interface (Swagger UI) where you can submit questions to the POST /ask route. Example of input JSON:
 
 ```json
 {
@@ -35,7 +39,31 @@ Swarm of conversational customer service agents. These include:
 }
 
 ```
+the answer will be a JSON with the agent and answer:
 
+```json
+{
+  "agent": "COBRANCA_ONLINE",
+  "answer": "Você pode criar um link de pagamento pelo painel da InfinityPay..."
+}
+``
+- To acess via postman, send an HTTP ``POST``request to ``http://127.0.0.1:8000/ask`` with the following body:
+
+```json
+{
+  "question": "Quais são os benefícios da conta digital?"
+}
+``
+- To ask via terminal (curl), execute the command:
+
+```bash
+curl -X POST http://127.0.0.1:8000/ask \
+-H "Content-Type: application/json" \
+-d '{"question": "Como funciona a maquininha da InfinityPay?"}'
+``
+
+
+### Docker
 - tbd
 
 ## Params
@@ -43,5 +71,5 @@ Swarm of conversational customer service agents. These include:
 - Vector Store: The parameter ``REBUILD_VECTOR_STORE`` to build the vector stores that is the knowledge base is set ``True`` by default, That is, every time the application is deployed or started locally, the process of creating and storing the vector store will be executed. To learn more, check the ``functions.py`` file.
 - Other parameters related to vector store such as sites that serve as source (``URL_LIST``), ``CHUNK_SIZE`` and ``CHUNK_OVERLAP`` can be checked in the ``config.yaml`` file
 
-## Demo
-<img src="demo.gif"> 
+## How to Contribute
+If you want to contribute to this project with improvements or suggestions, feel free to open a pull request.  
