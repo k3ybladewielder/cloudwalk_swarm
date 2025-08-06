@@ -46,14 +46,16 @@ the answer will be a JSON with the agent and answer:
   "agent": "COBRANCA_ONLINE",
   "answer": "Você pode criar um link de pagamento pelo painel da InfinityPay..."
 }
-``
+```
+
 - To acess via postman, send an HTTP ``POST``request to ``http://127.0.0.1:8000/ask`` with the following body:
 
 ```json
 {
   "question": "Quais são os benefícios da conta digital?"
 }
-``
+```
+
 - To ask via terminal (curl), execute the command:
 
 ```bash
