@@ -1,0 +1,77 @@
+
+# define se a vector store será recriada na execução. Default = False, pois o conhecimento do site não é efêmero.
+REBUILD_VECTOR_STORE: False
+
+# LLM e Modelo de embedding
+EMBEDDING_MODEL: "sentence-transformers/all-MiniLM-L6-v2"
+CACHE_FOLDER: "./model/"
+
+# qwen model family
+LLM_MODEL: "Qwen/Qwen3-0.6B"
+#LLM_MODEL: "Qwen/Qwen2.5-0.5B-Instruct"
+#LLM_MODEL: "Qwen/Qwen2.5-1.5B-Instruct"
+
+#LLM_MODEL: "Qwen/Qwen3-4B-MLX-4bit"
+#LLM_MODEL: "Qwen/Qwen3-0.6B-MLX-8bit"
+#LLM_MODEL: "Qwen/Qwen3-0.6B-MLX-bf16"
+
+# falcon model family
+#LLM_MODEL: "tiiuae/Falcon-H1-0.5B-Instruct"
+#LLM_MODEL: "tiiuae/Falcon-H1-1.5B-Instruct"
+#LLM_MODEL: "tiiuae/Falcon-H1-3B-Instruct"
+#LLM_MODEL: "tiiuae/Falcon-H1-7B-Instruct"
+
+#LLM_MODEL_GGUF: "tiiuae/Falcon-H1-0.5B-Instruct-GGUF"
+#LLM_MODEL_GGUF: "tiiuae/Falcon-H1-1.5B-Instruct-GGUF"
+#LLM_MODEL_GGUF: "tiiuae/Falcon-H1-3B-Instruct-GGUF"
+
+#LLM_MODEL: "tiiuae/Falcon-H1-7B-Instruct-GPTQ-Int4"
+#LLM_MODEL: "tiiuae/Falcon-H1-7B-Instruct-GPTQ-Int8"
+
+# Hunyuan model family
+#LLM_MODEL: tencent/Hunyuan-0.5B-Instruct
+#LLM_MODEL: tencent/Hunyuan-1.8B-Instruct
+
+# gemma model family
+#LLM_MODEL: google/gemma-2-2b-it
+#LLM_MODEL: google/gemma-3-1b-it
+#LLM_MODEL: google/gemma-1.1-2b-it
+#LOCAL_MODEL: "google/gemma-2b-it"
+#LLM_MODEL_GGUF: tbd
+#LLM_MODEL_FILE: "gemma-2b-it-Q4_K_M.gguf"
+#LLM_MODEL: "unsloth/gemma-3-4b-it"
+#LLM_MODEL_GGUF: "unsloth/gemma-3-4b-it-GGUF"
+#LLM_MODEL_FILE: "gemma-3-4b-it-BF16.gguf"
+
+# hermes model family
+#LLM_MODEL: NousResearch/Hermes-3-Llama-3.2-3B
+#LLM_MODEL_GGUF: "NousResearch/Hermes-3-Llama-3.2-3B-GGUF"
+#LLM_MODEL_FILE: "Hermes-3-Llama-3.2-3B.Q4_K_M.gguf"
+
+
+# Parametros da vector store
+VS_BASE: "./vector_store/vs_base"
+CHUNK_SIZE: 1500
+CHUNK_OVERLAP: 100
+
+# lista de urls que formarão a base de conhecimento
+URL_LIST : [
+"https://www.infinitepay.io", 
+"https://www.infinitepay.io/maquininha", 
+"https://www.infinitepay.io/maquininha-celular", 
+"https://www.infinitepay.io/tap-to-pay", 
+"https://www.infinitepay.io/pdv", 
+"https://www.infinitepay.io/receba-na-hora", 
+"https://www.infinitepay.io/gestao-de-cobranca",  
+"https://www.infinitepay.io/gestao-de-cobranca-2",  
+"https://www.infinitepay.io/link-de-pagamento", 
+"https://www.infinitepay.io/loja-online", 
+"https://www.infinitepay.io/boleto", 
+"https://www.infinitepay.io/conta-digital", 
+"https://www.infinitepay.io/conta-pj", 
+"https://www.infinitepay.io/pix",
+"https://www.infinitepay.io/pix-parcelado", 
+"https://www.infinitepay.io/emprestimo", 
+"https://www.infinitepay.io/cartao", 
+"https://www.infinitepay.io/rendimento"
+]
