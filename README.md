@@ -25,6 +25,17 @@ Swarm of conversational customer service agents. These include:
   - Acess the deployd version on Huggingface Spaces: https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm (WIP)
 
 ## Deploy:
+### API:
+- Initialize the API using the ``uvicorn api:app --reload`` command in the terminal.
+- Ali há uma interface interativa (Swagger UI) onde você pode enviar perguntas à rota POST /ask. Exemplo de JSON de entrada:
+
+``json
+{
+  "question": "Como posso receber pagamentos com maquininha?"
+}
+
+``
+
 - tbd
 
 ## Params
