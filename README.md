@@ -29,12 +29,12 @@ Swarm of conversational customer service agents. These include:
 - Initialize the API using the ``uvicorn api:app --reload`` command in the terminal.
 - Ali há uma interface interativa (Swagger UI) onde você pode enviar perguntas à rota POST /ask. Exemplo de JSON de entrada:
 
-``json
+```json
 {
   "question": "Como posso receber pagamentos com maquininha?"
 }
 
-``
+```
 
 - tbd
 
