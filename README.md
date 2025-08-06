@@ -62,7 +62,7 @@ the answer will be a JSON with the agent and answer:
 curl -X POST http://127.0.0.1:8000/ask \
 -H "Content-Type: application/json" \
 -d '{"question": "Como funciona a maquininha da InfinityPay?"}'
-``
+```
 
 
 ### Docker
