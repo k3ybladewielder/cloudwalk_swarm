@@ -84,14 +84,11 @@ def load_vector_store():
         raise FileNotFoundError(f"Arquivos .faiss e .pkl não encontrados em {VS_BASE}")
     return FAISS.load_local(VS_BASE, embedding_model, allow_dangerous_deserialization=True)
 
+# deprecated
 def build_specialist_agents(vectorstore, llm):
     
     template_base = (
-    "Você é um especialista da InfinityPay. Use o contexto abaixo para responder à pergunta de forma clara e direta.\n\n"
-    "Contexto: {context}\n\nPergunta: {question}\n\nResposta:")
-    
-    template_base = (
-    "<s>"
+    "<|im_start|>"
     "<TASK>\n"
     "Você é um especialista da InfinityPay. Use o contexto abaixo para responder à pergunta de forma clara e direta.\n"
     "</TASK>\n\n"
@@ -99,16 +96,18 @@ def build_specialist_agents(vectorstore, llm):
     "<CONTEXT>\n"
     "{context}\n"
     "</CONTEXT>\n"
+    "<|im_end|>"
     
+    "<|im_start|>user"
     "<QUESTION>\n"
     "{question}\n"
     "</QUESTION>\n"
+    "<|im_end|>"
     
+    "<|im_start|>assistant"
     "<ANSWER>\n"
-    "</s>"
+    "<|im_end|><|endoftext|>"
     )
-
-
 
     prompt_template = PromptTemplate(template=template_base, input_variables=["context", "question"])
 
@@ -126,13 +125,60 @@ def build_specialist_agents(vectorstore, llm):
         "PDV_ECOMMERCE": Tool(name="PDV_ECOMMERCE", func=make_agent().run, description="Especialista em PDV e ecommerce."),
         "CONTA_DIGITAL": Tool(name="CONTA_DIGITAL", func=make_agent().run, description="Especialista em conta digital, Pix, boleto, cartão, etc.")
     }
+    
+# Dynamic specialist agent builder
+def build_specialist_agents(vectorstore, llm):
+    
+    # Dicionário com o nome do agente e a especialidade correspondente
+    specialties = {
+        "GENERIC": "um especialista em atendimento ao cliente da InfinityPay",
+        "MAQUININHA": "um especialista em maquininhas da InfinityPay",
+        "COBRANCA_ONLINE": "um especialista em cobranças online da InfinityPay",
+        "PDV_ECOMMERCE": "um especialista em PDV e ecommerce da InfinityPay",
+        "CONTA_DIGITAL": "um especialista em conta digital, Pix, boleto, cartão, etc. da InfinityPay"
+    }
+
+    def make_agent(specialty):
+        # Template com placeholder para a especialidade
+        template_base = (
+            "<|im_start|>system"
+            f"Você é {specialty}. Use o contexto abaixo para responder à pergunta de forma clara e direta.\n"
+            "<CONTEXT>\n"
+            "{context}\n"
+            "</CONTEXT>\n"
+            "<|im_end|>\n"
+            
+            "<|im_start|>user"
+            "<QUESTION>\n"
+            "{question}\n"
+            "</QUESTION>\n"
+            "<|im_end|>"
+            
+            "<|im_start|>assistant"
+            "<ANSWER>\n"
+            "<|im_end|><|endoftext|>"
+        )
+
+        prompt_template = PromptTemplate(template=template_base, input_variables=["context", "question"])
+
+        return RetrievalQA.from_chain_type(
+            llm=llm,
+            retriever=vectorstore.as_retriever(),
+            chain_type_kwargs={"prompt": prompt_template}
+        )
+
+    # builda o dicionário de agentes, criando cada um com seu template especialidade
+    return {
+        key: Tool(name=key, func=make_agent(specialty).run, description=f"Especialista em {specialty}.")
+        for key, specialty in specialties.items()
+    }
 
 def load_react_agent(llm):
     if not SERPAPI_API_KEY or SERPAPI_API_KEY == "sua_serpapi_key":
         return None
     try:
         react_tool = Tool(
-            name="WebSearch",
+            name="WEB_SEARCHER",
             func=SerpAPIWrapper(serpapi_api_key=SERPAPI_API_KEY).run,
             description="Agente para busca na Internet."
         )
@@ -148,17 +194,6 @@ def load_react_agent(llm):
         return None
 
 def fallback_fn(input_text: str, llm) -> str:
-    #prompt_text = (
-    #    "A seguinte pergunta do usuário não pode ser direcionada para um agente específico.\n"
-    #    "Responda de forma geral e amigável, informando que a equipe de suporte pode ajudar.\n"
-    #    f"\n\nPergunta: {input_text}"
-    #)
-    
-    #prompt_text = (
-    #"A seguinte pergunta do usuário não pode ser direcionada para um agente específico.\n"
-    #"Responda de forma geral e amigável, informando que a equipe de suporte pode ajudar.\n"
-    #f"\n\nPergunta: {input_text}\n\nResposta:\n<s>"
-    #)
     
     prompt_text = (
     "<s>"
@@ -178,22 +213,6 @@ def fallback_fn(input_text: str, llm) -> str:
     except Exception as e:
         return "Desculpe, não consegui processar sua solicitação agora."
 
-def build_router_chain(llm, tokenizer):
-    return None  # Roteador baseado em palavras-chave substitui LLMChain
-
-#def keyword_router(input_text: str) -> str:
-#    keywords_map = {
-#        "MAQUININHA": ["maquininha", "máquina", "POS", "pagamento físico"],
-#        "COBRANCA_ONLINE": ["link de pagamento", "cobrança online", "pagamento online", "checkout"],
-#        "PDV_ECOMMERCE": ["PDV", "ecommerce", "venda online", "loja virtual"],
-#        "CONTA_DIGITAL": ["conta digital", "pix", "boleto", "transferência", "cartão"]
-#    }
-#    input_lower = input_text.lower()
-#    for agent, keywords in keywords_map.items():
-#        if any(keyword.lower() in input_lower for keyword in keywords):
-#            return agent
-#    return "GENERIC"
-
 def keyword_router(input_text: str) -> str:
     keywords_map = {
         "MAQUININHA": ["maquininha", "máquina", "POS", "pagamento físico"],
@@ -207,24 +226,11 @@ def keyword_router(input_text: str) -> str:
             return agent
     return "GENERIC"  # ou "Fallback" se quiser forçar atendimento humano
 
-
-# def swarm_router(input_text: str, tools: dict, router_chain, llm) -> str:
-#     try:
-#         agent_name = keyword_router(input_text)
-#         selected_tool = tools.get(agent_name, tools["Fallback"])
-#         if agent_name == "Fallback":
-#             return selected_tool.func(input_text, llm)
-#         elif selected_tool.func:
-#             return selected_tool.run(input_text)
-#         else:
-#             return fallback_fn(input_text, llm)
-#     except Exception as e:
-#         return fallback_fn(input_text, llm)
-
-def swarm_router(input_text: str, tools: dict, router_chain, llm) -> str:
+def swarm_router(input_text: str, tools: dict, llm) -> str:
     try:
         agent_name = keyword_router(input_text)
         selected_tool = tools.get(agent_name)
+        logger.info(f"Agente selecionado para a pergunta: {agent_name}")
 
         if selected_tool and selected_tool.func:
             return selected_tool.run(input_text)
@@ -252,25 +258,22 @@ def main():
         vectorstore = None
 
     specialists = build_specialist_agents(vectorstore, llm) if vectorstore else {}
-
-    if react_agent:
-        tools["ReAct"] = Tool(name="ReAct", func=react_agent.run, description="Busca externa na web.")
-
-    router_chain = build_router_chain(llm, tokenizer)
-
+    
+    # tooling agents
     tools = {}
-    tools.update(specialists)
-    tools.update(react_agent)
+    react_agent = load_react_agent(llm)
     if react_agent:
-        tools["ReAct"] = Tool(name="ReAct", func=react_agent.run, description="Busca externa na web.")
+        tools["WEB_SEARCHER"] = Tool(name="WEB_SEARCHER", func=react_agent.run, description="Busca externa na web.")
+    tools.update(specialists)
     tools["Fallback"] = Tool(name="Fallback", func=lambda x: fallback_fn(x, llm), description="Fallback generalista.")
-
+    logger.info(f"Agentes disponíveis: {list(tools.keys())}")
+    
     print("\n\nSwarm de agentes iniciado. Digite sua pergunta ou 'sair'.")
     while True:
         query = input("\nUsuário: ")
         if query.strip().lower() == "sair":
             break
-        resposta = swarm_router(query, tools, router_chain, llm)
+        resposta = swarm_router(query, tools, llm)
         print(f"\nSwarm: {resposta}")
 
 if __name__ == "__main__":

@@ -27,11 +27,10 @@ logger = logging.getLogger(__name__)
 llm = None
 tokenizer = None
 tools = None
-router_chain = None
 
 # Função de setup
 def setup():
-    global llm, tokenizer, tools, router_chain
+    global llm, tokenizer, tools
 
     logger.info("Inicializando Swarm via Gradio...")
 
@@ -54,23 +53,20 @@ def setup():
     # Agente de busca externa (opcional)
     react_agent = load_react_agent(llm)
 
-    # (Opcional) Chain de roteamento
-    router_chain = build_router_chain(llm, tokenizer)
-
     # Monta o dicionário final de ferramentas
     tools_local = {}
     tools_local.update(specialists)
     if react_agent:
         tools_local["ReAct"] = Tool(name="ReAct", func=react_agent.run, description="Busca externa na web.")
-        
     tools_local["Fallback"] = Tool(name="Fallback", func=lambda x: fallback_fn(x, llm), description="Fallback generalista.")
+
     tools = tools_local
 
 # Função usada pelo Gradio para processar mensagens
 def gradio_response(user_input, history):
     if not tools:
         return "Agentes ainda não estão prontos. Aguarde o carregamento."
-    return swarm_router(user_input, tools, router_chain, llm)
+    return swarm_router(user_input, tools, llm)
 
 # Inicializa
 setup()
@@ -103,3 +99,4 @@ if __name__ == "__main__":
         chatbot=gr.Chatbot(type="messages")
     )
     demo.launch()
+

@@ -12,3 +12,5 @@ bitsandbytes==0.46.1
 llama-cpp-python
 protobuf==6.31.1
 gradio
+fastapi
+uvicorn
