@@ -36,6 +36,7 @@ Swarm of conversational customer service agents. These include:
 ```json
 {
   "question": "Como posso receber pagamentos com maquininha?"
+  "user": "user_123"
 }
 
 ```
@@ -43,16 +44,26 @@ the answer will be a JSON with the agent and answer:
 
 ```json
 {
-  "agent": "COBRANCA_ONLINE",
-  "answer": "Você pode criar um link de pagamento pelo painel da InfinityPay..."
+  "response": personality_response,
+  "source_agent_response": raw_response,
+  "agent_workflow": [
+    {
+      "agent_name": "MAQUININHA",
+      "tool_calls": {
+        "MAQUININHA": "Você pode usar a maquininha com Wi-Fi ou chip..."
+      }
+    }
+  ]
 }
+
 ```
 
 - To acess via postman, send an HTTP ``POST``request to ``http://127.0.0.1:8000/ask`` with the following body:
 
 ```json
 {
-  "question": "Quais são os benefícios da conta digital?"
+  "question": "Quais são os benefícios da conta digital?",
+  "user_id": "usuario_123"
 }
 ```
 
@@ -61,7 +72,7 @@ the answer will be a JSON with the agent and answer:
 ```bash
 curl -X POST http://127.0.0.1:8000/ask \
 -H "Content-Type: application/json" \
--d '{"question": "Como funciona a maquininha da InfinityPay?"}'
+-d '{"message": "Quero saber sobre maquininhas", "user_id": "usuario_123"}'
 ```
 
 
