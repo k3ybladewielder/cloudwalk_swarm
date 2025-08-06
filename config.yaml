@@ -1,6 +1,6 @@
 
 # define se a vector store será recriada na execução. Default = False, pois o conhecimento do site não é efêmero.
-REBUILD_VECTOR_STORE: False
+REBUILD_VECTOR_STORE: True
 
 # LLM e Modelo de embedding
 EMBEDDING_MODEL: "sentence-transformers/all-MiniLM-L6-v2"
