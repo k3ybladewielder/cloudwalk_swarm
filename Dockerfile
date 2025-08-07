@@ -8,8 +8,8 @@ WORKDIR /app
 COPY . .
 
 # Instalar dependências
-RUN pip install --upgrade pip \
-    && pip install -r requirements.txt
+RUN pip install --upgrade pip uv \
+    && uv pip install -r requirements.txt
 
 # Expõe a porta 8000
 EXPOSE 8000
