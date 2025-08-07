@@ -16,7 +16,10 @@ The following agents were defined:
 - **WEB_SEACHER**: Agent to answer questions using the internet.
 - **Fallback**: Generalist agent, in case the ROUTER fails to direct to other agents.
 
+**CONSTRANTS**: ~Being a GPU-poor~ Faced with GPU restrictions for implementation, I preferred the use of *Small Language Models*. After testing, its results were reasonable. In addition, agent swarm frameworks are very _bloat_, and their documentation are (incomplete or inconsistent) [https://aiebr.substack.com/p/voce-nao-precisa-de-aum-framework]. Given this, I implemented the main functionaliades (swarm creation of agents, router, etc.) and used the necessary utilities of Langchain.
+
 The following subsections describe how to use the application, how to access it, and the initial parameters of the application.
+
 
 ## How to use:
 - Clone this repository into your local development environment.
