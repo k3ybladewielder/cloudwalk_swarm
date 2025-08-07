@@ -13,6 +13,7 @@ The following agents were defined:
 - **ONLINE_COBRANCA**: Specialist in online billing.
 - **PDV_ECOMMERCE**: Specialist in POS and ecommerce.
 - **CONTA_DIGITAL**: Specialist in digital accounts, Pix, boleto, cards, etc.
+- **WEB_SEACHER**: Agent to answer questions using the internet.
 - **Fallback**: Generalist agent, in case the ROUTER fails to direct to other agents.
 
 The following subsections describe how to use the application, how to access it, and the initial parameters of the application.
