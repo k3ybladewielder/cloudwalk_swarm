@@ -4,7 +4,7 @@
 
 In this framework, expert agents can be created dynamically using a dictionary containing ``{AGENT_NAME: SPECIALTY}`` (see ``build_specialist_agents`` in ``agents.py``) at agent creation time. Furthermore, there is a fallback function in case the agent responsible for selecting the expert fails, directing the agent to the fallback agent as a backup plan. After directing the question to the agent, it will generate the response, which will be forwarded to the personality layer before being sent to the user.
 
-Expert agents consult a FAISS vector store composed of a set of pages (see ``URL_LIST`` in ``config.yml``). This vector store is created at each initialization (REBUILD_VECTOR_STORE=True, by default) within a few moments, containing the most recent information. However, to use static content, simply change REBUILD_VECTOR_STORE=False. For each input, k documents are retrieved from the vector store and used as context for that input. The agent then uses this information to respond to the user's input.
+Expert agents consult a FAISS vector store composed of a set of pages (see ``URL_LIST`` in ``config.yml``). This vector store is created at each initialization (``REBUILD_VECTOR_STORE=True``, by default) within a few moments, containing the most recent information. However, to use static content, simply change ``REBUILD_VECTOR_STORE=False`` in ``config.yml``. For each input, k documents are retrieved from the vector store and used as context for that input. The agent then uses this information to respond to the user's input.
 
 The following agents were defined:
 - **ROUTER**: Receives the customer's message (input) and directs it to the most appropriate agent.
