@@ -1,7 +1,12 @@
 # CloudWalk Agent Swarm 🐝
-
 ## Description
-Swarm of conversational customer service agents. These include:
+<img src="framework.png"> 
+
+In this framework, expert agents can be created dynamically using a dictionary containing ``{AGENT_NAME: SPECIALTY}`` (see ``build_specialist_agents`` in ``agents.py``) at agent creation time. Furthermore, there is a fallback function in case the agent responsible for selecting the expert fails, directing the agent to the fallback agent as a backup plan. After directing the question to the agent, it will generate the response, which will be forwarded to the personality layer before being sent to the user.
+
+Expert agents consult a FAISS vector store composed of a set of pages (see ``URL_LIST`` in ``config.yml``). This vector store is created at each initialization (REBUILD_VECTOR_STORE=True, by default) within a few moments, containing the most recent information. However, to use static content, simply change REBUILD_VECTOR_STORE=False.
+
+The following agents were defined:
 - **ROUTER**: Receives the customer's message (input) and directs it to the most appropriate agent.
 - **GENERIC**: Generic agent for InfinityPay.
 - **MAQUININHA**: Specialist in POS terminals.
@@ -9,6 +14,8 @@ Swarm of conversational customer service agents. These include:
 - **PDV_ECOMMERCE**: Specialist in POS and ecommerce.
 - **CONTA_DIGITAL**: Specialist in digital accounts, Pix, boleto, cards, etc.
 - **Fallback**: Generalist agent, in case the ROUTER fails to direct to other agents.
+
+The following subsections describe how to use the application, how to access it, and the initial parameters of the application.
 
 ## How to use:
 - Clone this repository into your local development environment.
@@ -20,11 +27,10 @@ Swarm of conversational customer service agents. These include:
   - Windows (cmd.exe): ``.venv\Scripts\activate``
   - Windows (PowerShell): ``.venv\Scripts\Activate.ps1``
 - Install the required libraries with ``uv pip install -r requirements.txt``.
-- Application
-  - Run the app locally with ``python3 app-gradio.py``;
 
+### Gradio
+- Run the app locally with ``python3 app-gradio.py``.
 
-## How to Acess and deploy:
 ### HuggingFace Spaces
 - Acess the deployd version on Huggingface Spaces: https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm (WIP)
 <img src="demo.gif"> 
@@ -75,9 +81,10 @@ curl -X POST http://127.0.0.1:8000/ask \
 -d '{"message": "Quero saber sobre maquininhas", "user_id": "usuario_123"}'
 ```
 
-
 ### Docker
-- tbd
+- build the image executing the command ``docker-compose build``, then inicialize the API with ``docker-compose up``. The API will be available on ``http://localhost:8000/``;
+- To watch the logs in real time, use the command ``docker-compose logs -f``;
+- To stop the container, use ``docker-compose down``.
 
 ## Params
 - LLM: Default model used is ``"Qwen/Qwen3-0.6B"``, to change the model, just change the ```LLM_MODEL``` parameter in the ```config.yaml``` file.

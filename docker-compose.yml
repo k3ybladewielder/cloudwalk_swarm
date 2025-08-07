@@ -1,0 +1,13 @@
+services:
+  infinitypay-api:
+    build: .
+    container_name: infinitypay_swarm
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - HF_TOKEN=your_huggingface_token
+      - SERPAPI_API_KEY=your_serpapi_key
+    restart: unless-stopped
+
