@@ -27,13 +27,13 @@ The following subsections describe the project structure, how to use the applica
 ```
 cloudwalk_swarm/
 │
-├── agents.py                    # Main logic for creating and routing agents
+├── agents.py                     # Main logic for creating and routing agents
 ├── api.py                        # FastAPI HTTP endpoint exposing the agents
 ├── config.yaml                   # Application configurations (models, chunk size, etc.)
 ├── functions.py                  # Helper functions (e.g., vector store rebuilding)
 ├── requirements.txt              # Python dependencies list
 ├── Dockerfile                    # Docker image build file
-├── docker-compose.yml             # Container orchestration
+├── docker-compose.yml            # Container orchestration
 ├── .env                          # Environment variables (tokens, keys, configs)
 │
 ├── models/                       # Stores LLMs and embedding models
@@ -46,7 +46,6 @@ cloudwalk_swarm/
 │       ├── index.faiss
 │       └── index.pkl
 │
-├── cache/                        # Temporary download cache
 │
 └── README.md                     # Project documentation
 ```
