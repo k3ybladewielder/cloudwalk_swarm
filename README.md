@@ -16,12 +16,44 @@ The following agents were defined:
 - **WEB_SEACHER**: Agent to answer questions using the internet.
 - **Fallback**: Generalist agent, in case the ROUTER fails to direct to other agents.
 
-**CONSTRANTS**: ~Being a GPU-poor~ Faced with GPU restrictions for implementation, I preferred the use of *Small Language Models*. After testing, its results were reasonable. In addition, agent swarm frameworks are very _bloat_, and their documentation are [incomplete or inconsistent](https://aiebr.substack.com/p/voce-nao-precisa-de-aum-framework). Given this, I implemented the main functionaliades (swarm creation of agents, router, etc.) and used the necessary utilities of Langchain.
+⚠️ **CONSTRANTS**: 
+- The project development deadline was **SEVEN HOURS**.
+- ~Being a GPU-poor~ Faced with GPU restrictions for implementation, I preferred the use of *Small Language Models*. After testing, its results were reasonable. In addition, agent swarm frameworks are very _bloat_, and their documentation are [incomplete or inconsistent](https://aiebr.substack.com/p/voce-nao-precisa-de-aum-framework). Given this, I implemented the main functionaliades (swarm creation of agents, router, etc.) and used the necessary utilities of Langchain.
 
-The following subsections describe how to use the application, how to access it, and the initial parameters of the application.
+The following subsections describe the project structure, how to use the application, how to access it, and the initial parameters of the application.
 
+## 📂 Project Structure
+
+```
+cloudwalk_swarm/
+│
+├── agents.py                    # Main logic for creating and routing agents
+├── api.py                        # FastAPI HTTP endpoint exposing the agents
+├── config.yaml                   # Application configurations (models, chunk size, etc.)
+├── functions.py                  # Helper functions (e.g., vector store rebuilding)
+├── requirements.txt              # Python dependencies list
+├── Dockerfile                    # Docker image build file
+├── docker-compose.yml             # Container orchestration
+├── .env                          # Environment variables (tokens, keys, configs)
+│
+├── models/                       # Stores LLMs and embedding models
+│   ├── huggingface/               # Local HuggingFace cache
+│   └── other_models/              # Space for other required models
+│
+├── vector_store/                 # Stores vector data
+│   └── vs_base/                   # Persistent FAISS vector database
+│       ├── index.faiss
+│       └── index.pkl
+│
+├── cache/                        # Temporary download cache
+│
+└── README.md                     # Project documentation
+```
 
 ## How to use:
+- Requirements:
+  - Python >= 3.9.
+  - All the dependencies are settes with fixed/freezed versions in the ``requirements.txt`` file.
 - Clone this repository into your local development environment.
 - Install ``uv`` with pip: ``pip install uv``
 - Create a .env file with the environment variables ``HF_TOKEN`` and ``SERPAPI_API_KEY``.
@@ -31,9 +63,6 @@ The following subsections describe how to use the application, how to access it,
   - Windows (cmd.exe): ``.venv\Scripts\activate``
   - Windows (PowerShell): ``.venv\Scripts\Activate.ps1``
 - Install the required libraries with ``uv pip install -r requirements.txt``.
-
-### Gradio
-- Run the app locally with ``python3 app-gradio.py``.
 
 ### HuggingFace Spaces
 - Acess the deployd version on Huggingface Spaces: https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm (WIP)
@@ -89,6 +118,9 @@ curl -X POST http://127.0.0.1:8000/ask \
 - build the image executing the command ``docker-compose build``, then inicialize the API with ``docker-compose up``. The API will be available on ``http://localhost:8000/``;
 - To watch the logs in real time, use the command ``docker-compose logs -f``;
 - To stop the container, use ``docker-compose down``.
+
+### Locally (Gradio)
+- Run the app locally with ``python3 app-gradio.py``.
 
 ## Params
 - LLM: Default model used is ``"Qwen/Qwen3-0.6B"``, to change the model, just change the ```LLM_MODEL``` parameter in the ```config.yaml``` file.
