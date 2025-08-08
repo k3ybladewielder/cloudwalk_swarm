@@ -37,11 +37,12 @@ cloudwalk_swarm/
 ├── .env                          # Environment variables (tokens, keys, configs)
 │
 ├── models/                       # Stores LLMs and embedding models
-│   ├── huggingface/               # Local HuggingFace cache
-│   └── other_models/              # Space for other required models
+│   ├── models--Qwen--Qwen3-0.6B/ 
+│   └── models--google--gemma-2b-it/
+│   └── etc.../
 │
 ├── vector_store/                 # Stores vector data
-│   └── vs_base/                   # Persistent FAISS vector database
+│   └── vs_base/                  # Persistent FAISS vector database
 │       ├── index.faiss
 │       └── index.pkl
 │
