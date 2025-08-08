@@ -65,9 +65,9 @@ cloudwalk_swarm/
   - Windows (PowerShell): ``.venv\Scripts\Activate.ps1``
 - Install the required libraries with ``uv pip install -r requirements.txt``.
 
-### HuggingFace Spaces
-- Acess the deployd version on Huggingface Spaces: https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm (WIP)
-<img src="demo.gif"> 
+### HuggingFace Spaces (WIP)
+- Acess the deployd version on (Huggingface Spaces)[https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm]. 
+<img src="demo2.gif"> 
 
 ### API:
 - Initialize the API using the ``uvicorn api:app --reload`` command in the terminal.
