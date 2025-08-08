@@ -65,7 +65,7 @@ cloudwalk_swarm/
 - Install the required libraries with ``uv pip install -r requirements.txt``.
 
 ### HuggingFace Spaces (WIP)
-- Acess the deployd version on (Huggingface Spaces)[https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm]. 
+- Acess the deployd version on [Huggingface Spaces](https://huggingface.co/spaces/k3ybladewielder/cloudwalk_swarm). 
 <img src="demo2.gif"> 
 
 ### API:
